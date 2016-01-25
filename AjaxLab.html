@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl" lang="pl">
+  <head>
+    <title>Ajax. Kurs od podstaw. LAB1</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	
+	<style type="text/css">
+    li {
+        padding: 5px;
+        border: 1px solid black;
+        width: 300px;
+        margin: 5px;
+		background: yellow;
+		}
+
+	#poj {
+        
+        width: 960px;
+			}
+	#expoj{
+		padding: 7px;
+		display:none;
+			}	
+    #menu {
+        width: 300px;
+        
+			}
+    #cytat {
+		margin-left: 20px;
+        width: 600px;    
+        white-space: pre;
+		}
+	#poj41 {
+        padding: 5px;
+        border: 1px solid black;
+        width: 300px;
+        margin: 5px;
+		background: yellow;
+		}
+	.poj42 {
+        width: 300px;
+        border: 1px solid black;
+        padding: 10px;
+        background: #e8fff1;        
+        margin: 10px;
+    }
+    a {
+        width: 20px;
+        font-family: "Courier New", monospace;
+        text-decoration: none;
+    }
+	
+    </style>
+    
+    
+<script type="text/javascript">
+    
+function getXMLHttpRequest()
+{
+    var request = false;
+    
+    try {
+        /*
+	 * Przeglądarki: Firefox 2, Opera 9, IE 7
+	 */
+        request = new XMLHttpRequest();
+    } catch(err1) {
+        try {
+            /*
+             * Przeglądarka: IE 6
+             */
+            request = new ActiveXObject('Msxml2.XMLHTTP');
+        } catch(err2) {
+            try {
+                /*
+                 * Przeglądarka: IE 5
+                 */
+                request = new ActiveXObject('Microsoft.XMLHTTP');                
+            } catch(err3) {
+                request = false;
+            }
+        }
+    }
+    return request;
+}       
+///////////////////////////////////////////////////////////////////////  1  /////////////////
+
+ alert('AUTHOR: 125nciOstrowskiK'); 
+
+////////////////////////////////////////////////////////////////////// 2-1 /////////////////
+
+var r21;
+r21 = getXMLHttpRequest(); 
+
+function processResponse21()
+{
+    if (r21.readyState == 4) {
+        if (r21.status == 200) {
+            alert('Wiadomość z pliku tekscik.txt: ' + r21.responseText);
+        };
+    };
+}
+
+r21.open('GET', 'plikiLab1/tekscik.txt', true);
+r21.onreadystatechange = processResponse21;
+r21.send(null);
+
+/* Możliwe wartości właściwości 'status':
+	
+	200: "OK"
+	404: Page not found
+*/
+
+
+////////////////////////////////////////////////////////////////////////// 2-2 ////////////
+
+var r22;
+
+r22 = getXMLHttpRequest(); 
+
+function processResponse22()
+{
+    if (r22.readyState == 4) {
+        if (r22.status == 200) {
+            
+            alert('XML: ' + r22.responseXML.getElementsByTagName('tag1')[0].childNodes[0].nodeValue);
+        };
+    };
+}
+
+r22.open('GET', 'plikiLab1/tekscik.xml', true);
+r22.onreadystatechange = processResponse22;
+r22.send(null);
+
+/* Możliwe wartości właściwości 'readyState':
+
+Holds the status of the XMLHttpRequest. Changes from 0 to 4: 
+0: request not initialized 
+1: server connection established
+2: request received 
+3: processing request 
+4: request finished and response is ready
+
+*/
+
+/////////////////////////////////////////////////////////////////////////// 3-2 ///////////////////
+
+function onclickHandler32()
+{
+    var el;
+    el = document.getElementById('eventsy');
+    el.innerHTML = '..................................CLICK...................................';
+    el.style.border = '2px solid red';
+    el.style.background = '#fef4e0';
+}    
+
+function onmouseoverHandler32()
+{
+    var el;
+    el = document.getElementById('eventsy');
+    el.innerHTML = '..................................OVER...................................';
+    el.style.border = '2px solid green';
+    el.style.background = '#d8fee6';
+}    
+
+function onmouseoutHandler32()
+{
+    var el;
+    el = document.getElementById('eventsy');
+    el.innerHTML = '..................................OUT...................................';
+    el.style.border = '2px solid blue';
+    el.style.background = '#d6edfe';
+}    
+
+///////////////////////////////////////////////////////////////////////// 3-3 /////////////////////
+
+var r33;
+
+r33 = getXMLHttpRequest();    
+
+
+function processResponse33()
+{
+    if (r33.readyState == 4) {
+        if (r33.status == 200) {
+            document.getElementById('cytat').innerHTML = 
+                r33.responseXML.getElementsByTagName('tekst')[0].childNodes[0].nodeValue;	        
+                
+            document.getElementById('cytat').style.background = '#e3f5fb';
+        };
+    }
+}
+
+
+function getText(Dane)
+{
+    r33.open('GET', Dane, true);
+    r33.onreadystatechange = processResponse33;
+    r33.send(null);
+}
+
+
+function clearText()
+{
+    document.getElementById('cytat').innerHTML = 'Wybierz jedną z opcji...';
+    document.getElementById('cytat').style.background = 'white';
+}
+
+///////////////////////////////////////////////////////////////////////////// 4-1 ////////////////////
+var expanded = false;
+
+function expandCollapse41()
+{
+    if (expanded) {
+        expanded = false;
+        document.getElementById('expoj').style.display = 'none';        
+        document.getElementById('icon').innerHTML = '+';
+    } else {
+        expanded = true;
+        document.getElementById('expoj').style.display = 'block';                
+        document.getElementById('expoj').innerHTML = 'to weź się za czytanie książek.';
+        document.getElementById('icon').innerHTML = '-';        
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////// 4-2 /////////////////////
+function expandCollapse42(Id)
+{
+    var n = Id.parentNode.childNodes[2];
+    if (n.style.display == 'block') {
+        n.style.display = 'none';        
+        Id.innerHTML = '+';
+    } else {
+        n.style.display = 'block';                
+        n.innerHTML = 'Pojemnik nr :'+ Id.nextElementSibling.innerHTML;
+        Id.innerHTML = '-';        
+    }
+}
+
+////////////////////////////////////////////////////////////////////////// 4-3 /////////////////////////
+
+var r43;
+
+r43 = getXMLHttpRequest();    
+
+
+var opis= new Array(5);
+opis[0]  = 'Nazwa';
+opis[1]  = 'Rodzaj';
+opis[2]  = 'Kraj';
+opis[3]  = 'Rok';
+opis[4]  = 'Cena';
+
+var ele43;
+
+function processResponse43()
+{
+    if (r43.readyState == 4) {
+        if (r43.status == 200) {
+        
+            var x = r43.responseXML.getElementsByTagName('owoc')[0].childNodes;  // nodelist    
+
+            var tmp = '';	
+            for (i = 1; i < x.length; i++) {
+                tmp = tmp    + '<strong>' + opis[i] + ':</strong> '
+		    + x[i].childNodes[0].nodeValue
+			+ '<br />';
+            }
+            
+            ele43.innerHTML = tmp;
+        };
+    }
+}
+
+
+function expC43(Id, Numer)
+{
+    ele43 = Id.parentNode.parentNode.childNodes[1];
+    if (ele43.style.display == 'block') {
+        ele43.style.display = 'none';        
+        Id.innerHTML = '+';
+    } else {
+        ele43.style.display = 'block';                
+        Id.innerHTML = '-';                
+        
+        r43.open('GET', 'plikiLab1/' + Numer + '.xml', true);
+        r43.onreadystatechange = processResponse43;
+        r43.send(null);        
+    }
+}   
+
+
+</script>
+  
+</head>
+<body>
+
+
+<!-- /////////////////////////////////////////////////////////////////////// 3-1 ////////////// -->
+<div>
+<h1> ZADANIE 3-1 </h1>
+<div id="ele31"></div>
+
+<script type="text/javascript">
+
+  
+var element31;
+
+element31 = document.getElementById('ele31');
+element31.innerHTML = 'To już <b>COŚ</b> napiszemy .............. <b>COŚ</b>';
+element31.style.background = '#111111';		<!-- zmiana koloru tła -->
+element31.style.color = 'yellow';			<!-- zmiana koloru tekstu -->	  
+</script>
+
+</div>
+<!-- /////////////////////////////////////////////////////////////////////// 3-2 /////////////// -->
+<div>
+<h1> ZADANIE 3-2 </h1>
+<ul>
+<li onclick="onclickHandler32();">Kliknij TUTAJ!!!</li>
+<li onmouseover="onmouseoverHandler32();">Najedź TUTAJ kursorem</li>
+<li onmouseout="onmouseoutHandler32();">Wjechales i zbarałeś :(</li>
+</ul>
+
+<div id="eventsy"></div>
+</div>
+
+<!-- /////////////////////////////////////////////////////////////////////// 3-3 /////////////////// -->
+<div>
+<h1> ZADANIE 3-3 </h1>
+<ul id="menu">
+    <li><a href='#' onmouseover="getText('plikiLab1/beethoven.xml');" onmouseout="clearText();">Ludwig van Beethoven</a></li>
+    <li><a href='#' onmouseover="getText('plikiLab1/tarantino.xml');" onmouseout="clearText();">Quentin Tarantino</a></li>                  
+    <li><a href='#' onmouseover="getText('plikiLab1/morrison.xml');" onmouseout=" clearText();">Jim Morrison</a></li>      
+</ul>
+
+    <p id="cytat">Wybierz jedną z opcji</p>
+
+</div>	
+
+<!-- ////////////////////////////////////////////////////////////////////// 4-1 ///////////////////// -->
+<div>
+<h1> ZADANIE 4-1 </h1>
+<div id="poj41">Chcesz wiedzieć więcej...<a id="icon" href="#" onclick="expandCollapse41();">+</a><div id="expoj"></div></div>
+</div>
+
+<!-- ///////////////////////////////////////////////////////////////////// 4-2 ///////////////////// -->
+<div>
+<h1> ZADANIE 4-2 </h1>
+<div class="poj42"><a href="#" onclick="expandCollapse42(this);">+</a><span id='tt'>#1</span><div></div></div>
+<div class="poj42"><a href="#" onclick="expandCollapse42(this);">+</a><span id='tt'>#2</span><div></div></div>
+<div class="poj42"><a href="#" onclick="expandCollapse42(this);">+</a><span id='tt'>#3</span><div></div></div>
+<div class="poj42"><a href="#" onclick="expandCollapse42(this);">+</a><span id='tt'>#4</span><div></div></div>
+<div class="poj42"><a href="#" onclick="expandCollapse42(this);">+</a><span id='tt'>#5</span><div></div></div>
+<div class="poj42"><a href="#" onclick="expandCollapse42(this);">+</a><span id='tt'>#6</span><div></div></div>
+<div class="poj42"><a href="#" onclick="expandCollapse42(this);">+</a><span id='tt'>#7</span><div></div></div>
+</div>
+<!-- /////////////////////////////////////////////////////////////////////// 4-3 //////////////////////// -->
+<h1> ZADANIE 4-3 (OWOCE) </h1>
+
+<div class="tresc"><h3><a href="#" onclick="expC43(this, 1);">+</a>Jabłko</h3><div></div></div>
+<div class="tresc"><h3><a href="#" onclick="expC43(this, 2);">+</a>Wiśnia</h3><div></div></div>
+<div class="tresc"><h3><a href="#" onclick="expC43(this, 3);">+</a>Jagoda</h3><div></div></div>
+<div class="tresc"><h3><a href="#" onclick="expC43(this, 4);">+</a>Orzech laskowy</h3><div></div></div>
+<div class="tresc"><h3><a href="#" onclick="expC43(this, 5);">+</a>Cytryna</h3><div></div></div>
+
+</body>
+</html>
+
